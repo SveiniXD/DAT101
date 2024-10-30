@@ -27,7 +27,7 @@ if (wakeUpTime > busTime){
 printOut(newLine);
 
 printOut("--- Part 4, 5 --------------------------------------------------------------------------------------------");
-let number = -2;
+let number = 0;
 
 if (number < 0) {
     printOut(number.toString() + " is negative");
@@ -53,48 +53,70 @@ if (imageSize >= 4) {
 } else {
     printOut("The image is too small");
 }
-if (imageSize > 6){
-  printOut("Image is too Large")
-}
 
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+printOut("Photo size = "+ imageSize + " " )
 
-if (imageSize >= 4) {
-  printOut("Thank you");
+if (imageSize >= 6) {
+  printOut("The Image is too large");
 } else {
-  printOut("The image is too small");
+  printOut("The image works fine");
 }
-if (imageSize > 6){
-printOut("Image is too Large")
-}
-
-
-
-
-
-
-
-
-
 
 printOut(newLine);
 
 printOut("--- Part 8 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+const monthList = ["January", "February", "March", "April", "May", "June","July", "August", "September","October", "November", "December"];
+const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; 
+  const noOfMonth = monthList.length;
+  const monthName = monthList[Math.floor(Math.random() * noOfMonth)];
+  const monthIndex = monthList.indexOf(monthName)
+  const days = daysInMonth[monthIndex];
+
+printOut("Month is " + monthName.toString());
+if (monthName.includes("r")){
+  printOut("You must take Vitamin D");  
+} else {
+  printOut("You do not need to take Vitamin D");
+}
+
+
 printOut(newLine);
 
 printOut("--- Part 9 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+printOut(`The month of ${monthName} has ${days} days.`);
+
 printOut(newLine);
 
 /* Task 10*/
 printOut("--- Part 10 ---------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
-printOut(newLine);
+
+const monthList2 = ["January", "February", "March", "April", "May", "June","July", "August", "September","October", "November", "December"];
+const daysInMonth2 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; 
+  const noOfMonth2 = monthList2.length;
+  const monthName2 = monthList2[Math.floor(Math.random() * noOfMonth2)];
+  const monthIndex2 = monthList2.indexOf(monthName2);
+  const days2 = daysInMonth2[monthIndex2];
+
+  printOut(monthName2.toString());
+
+
+console.log(monthName2)
+
+if (monthName2 === "Mars" || monthName2 === "May"){
+  printOut("The Gallery Is Closed");
+} else if (monthIndex2 === 3) {
+  printOut("There Is a temporary premises in the building next door");
+} else {
+  printOut("The art gallery is open"); 
+}
+
+printOut(newLine); 
