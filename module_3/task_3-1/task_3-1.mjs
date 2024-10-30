@@ -27,18 +27,60 @@ if (wakeUpTime > busTime){
 printOut(newLine);
 
 printOut("--- Part 4, 5 --------------------------------------------------------------------------------------------");
-/* Put your code below here!*/
-printOut("Replace this with you answer!");
+let number = -2;
+
+if (number < 0) {
+    printOut(number.toString() + " is negative");
+} else if (number > 0){
+    printOut(number.toString() + " is positive");
+} else{
+  printOut(number.toString() + " is zero")
+}
+
 printOut(newLine);
 
 printOut("--- Part 6 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
-printOut("Replace this with you answer!");
+
+let imageSize = Math.floor(Math.random() * 8) + 1;{
+  printOut("The Image Size is:", imageSize, "MP"); 
+}
+printOut (imageSize.toString());
+  
+
+if (imageSize >= 4) {
+    printOut("Thank you");
+} else {
+    printOut("The image is too small");
+}
+if (imageSize > 6){
+  printOut("Image is too Large")
+}
+
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
 printOut("Replace this with you answer!");
+
+if (imageSize >= 4) {
+  printOut("Thank you");
+} else {
+  printOut("The image is too small");
+}
+if (imageSize > 6){
+printOut("Image is too Large")
+}
+
+
+
+
+
+
+
+
+
+
 printOut(newLine);
 
 printOut("--- Part 8 ----------------------------------------------------------------------------------------------");
