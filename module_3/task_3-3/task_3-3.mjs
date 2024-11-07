@@ -151,6 +151,7 @@ printOut(newLine);
 printOut("--- Part 6 ----------------------------------------------------------------------------------------------");
 /* Put your code below here!*/
 console.log("v Part 6 v");
+
 function price(grossAmount, taxGroup){
     let vat = 0;
     
@@ -173,8 +174,8 @@ function price(grossAmount, taxGroup){
     return (100 * grossAmount) / (vat + 100);
 }
 
-const grossAmount = parseInt(prompt("what is the gross amount? "))
-const taxGroup = (prompt("What is the tax group? "))
+const grossAmount = prompt("what is the gross amount? ")
+const taxGroup = prompt("What is the tax group? ")
 
 price(grossAmount, taxGroup);
 
