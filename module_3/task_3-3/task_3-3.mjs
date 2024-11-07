@@ -179,6 +179,8 @@ const taxGroup = prompt("What is the tax group? ")
 
 price(grossAmount, taxGroup);
 
+
+
 printOut(newLine);
 
 printOut("--- Part 7 ----------------------------------------------------------------------------------------------");
