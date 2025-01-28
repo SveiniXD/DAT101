@@ -69,10 +69,13 @@ function loadGame() {
   pos.y = 100;
   GameProps.hero = new THero(spcvs, SpriteInfoList.hero1, pos);
 
-  GameProps.menu = new TMenu(spcvs);
+  spawnObstacle();
+  spawnBait();
 
   requestAnimationFrame(drawGame);
   setInterval(animateGame, 10);
+
+  GameProps.menu = new TMenu(spcvs);
 }// end of loadGame
 
 function drawGame() {
@@ -165,12 +168,6 @@ function spawnBait() {
     const sec = Math.ceil(Math.random() * 5) / 10 + 0.5;
     setTimeout(spawnBait, sec * 1000);
   }
-}
-
-export function startGame() {
-  GameProps.status = EGameStatus.playing;
-  spawnObstacle();
-  spawnBait();
 }
 
 //--------------- Event Handlers -----------------------------------------//
