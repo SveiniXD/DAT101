@@ -47,6 +47,13 @@ class TSpriteCanvas {
     }else{
       this.#ctx.drawImage(this.#img, sx, sy, sw, sh, dx, dy, dw, dh);
     }
+  } //End of drawSprite
+
+  drawText(aText, aPos){
+    this.#ctx.font = "25px Times New Roman";
+    this.#ctx.fillStyle = "Blue";
+    this.#ctx.textAlign = "right";  
+    this.#ctx.fillText(aText, aPos.x, aPos.y);
   }
 
   clearCanvas() {

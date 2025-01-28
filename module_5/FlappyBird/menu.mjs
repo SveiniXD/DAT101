@@ -14,30 +14,50 @@ export class TMenu {
   #spButtonPlay;
   #spNumber;
   #spInfoText;
+  //Hint spGameOver, spMedal, spScore osv.
+  #spGameOver;
+  #spMedal;
   #spcvs;
   #activeSprite;
+  #posScore;
+  #posBestScore;
   constructor(aSpriteCanvas) {
     this.#spcvs = aSpriteCanvas;
-    const pos = new lib2d.TPosition(200, 100);
-    //GameProps.status = EGameStatus.getReady;
-
+    /* 
+    Bruk denne koden for jukse litt og starte spillet direkte 
+    i en annen status enn EGameStatus.idle
+    */
+    GameProps.status = EGameStatus.gameOver;
+    const pos = new lib2d.TPosition(210, 180);
     this.#spFlappyBird = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.flappyBird, pos);
-    pos.y = 200;
-    pos.x = 230;
-
+    
+    pos.y = 260;
+    pos.x = 245;
     this.#spButtonPlay = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.buttonPlay, pos);
 
     pos.x = 200;
-    pos.y = 100;
+    pos.y = 70;
     this.#spInfoText = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.infoText, pos);
 
     pos.x = 285;
     pos.y = 180;
     this.#spNumber = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.numberBig, pos);
     this.#spNumber.index = 3; //Nedtelling starter på 3
+    
+    pos.x = 185;
+    pos.y = 130;
+    this.#spGameOver = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.gameOver, pos);
+    
+    pos.x = 211;
+    pos.y = 173;
+    this.#spMedal = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.medal, pos);
     this.#spcvs.addEventListener("mousemove", this.#onMouseMove);
     this.#spcvs.addEventListener("click", this.#onClick);
     this.#activeSprite = null; //Vi har ingen aktive sprite enda, når musen er over en sprite setter vi denne til den aktive sprite
+
+    this.#posScore = new lib2d.TPosition(390, 222);
+    this.#posBestScore = new lib2d.TPosition(390, 182);
+
   }
 
   draw() {
@@ -49,6 +69,15 @@ export class TMenu {
       case EGameStatus.getReady:
         this.#spInfoText.draw();
         this.#spNumber.draw();
+        break;
+      case EGameStatus.gameOver:
+        this.#spInfoText.index = 1; //Endre teksten til "Game Over"
+        this.#spInfoText.draw();
+        this.#spGameOver.draw();
+        this.#spMedal.draw();
+        this.#spcvs.drawText("50", this.#posScore);
+        this.#spcvs.drawText("100", this.#posBestScore);
+        this.#spButtonPlay.draw();
         break;
     }
   } // end of draw
