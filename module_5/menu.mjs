@@ -1,150 +1,171 @@
 "use strict";
-import lib2d from "../../common/libs/lib2d.mjs";
-import libSound from "../../common/libs/libSound.mjs";
-import libSprite from "../../common/libs/libSprite.mjs";
-import { SpriteInfoList, GameProps, EGameStatus, startGame } from "./FlappyBird.mjs";
+import libSprite from "../../common/libs/libSprite_v2.mjs";
+import lib2D from "../../common/libs/lib2d_v2.mjs";
+import{ GameProps, SpriteInfoList, moveRoundIndicator, newGame} from "./Mastermind.mjs";
+import MastermindBoard from "./MastermindBoard.mjs";
 
-/*
-Dere skal flytte FlappyBird Spriten til en fornuftig plass på skjermen.
-Lage en play knapp som kan starte spillet.
-*/
-
+//Lag en meny klasse "TMenu", ingen arv, skal ha tre knapper og en sprite
 export class TMenu {
-  #spFlappyBird;
-  #spButtonPlay;
-  #spNumber;
-  #spInfoText;
-  //Hint spGameOver, spMedal, spScore osv.
-  #spGameOver;
-  #spMedal;
+  #buttonNewGame;
+  #buttonCheckAnswer;
+  #buttonCheat;
+  #panelCheat;
+  #colorHints;
   #spcvs;
-  #activeSprite;
-  #posScore;
-  #posBestScore;
-  #posPlayScore;
-  #ranking = {first: 0, second: 0, third: 0};
-  constructor(aSpriteCanvas) {
+  #roundNumber;
+  constructor(aSpriteCanvas){
     this.#spcvs = aSpriteCanvas;
-    /* 
-    Bruk denne koden for jukse litt og starte spillet direkte 
-    i en annen status enn EGameStatus.idle
-    */
-    GameProps.status = EGameStatus.idle;
-    const pos = new lib2d.TPosition(210, 180);
-    this.#spFlappyBird = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.flappyBird, pos);
+    this.#roundNumber = 1;
+    this.#buttonNewGame = 
+    new libSprite.TSpriteButtonHaptic(
+      aSpriteCanvas,
+      SpriteInfoList.ButtonNewGame,
+      MastermindBoard.ButtonNewGame);
+    
 
-    pos.y = 260;
-    pos.x = 245;
-    this.#spButtonPlay = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.buttonPlay, pos);
+    this.#buttonCheckAnswer = 
+    new libSprite.TSpriteButtonHaptic(
+      aSpriteCanvas,
+      SpriteInfoList.ButtonCheckAnswer,
+      MastermindBoard.ButtonCheckAnswer);
+    
+    this.#buttonCheat = 
+    new libSprite.TSpriteButtonHaptic(
+      aSpriteCanvas,
+      SpriteInfoList.ButtonCheat,
+      MastermindBoard.ButtonCheat);
 
-    pos.x = 200;
-    pos.y = 70;
-    this.#spInfoText = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.infoText, pos);
+    this.#panelCheat = 
+      new libSprite.TSprite(
+        aSpriteCanvas,
+        SpriteInfoList.PanelHideAnswer,
+        MastermindBoard.PanelHideAnswer);   
+        
+    this.#buttonCheat.onClick = this.onButtonCheatClick;
+    this.#buttonCheckAnswer.onClick = this.onCheckAnswerClick;
+    this.#buttonNewGame.onClick = this.onButtonNewGameClick;
+    this.#colorHints = [];
+  }//End of constructor
 
-    pos.x = 285;
-    pos.y = 180;
-    this.#spNumber = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.numberBig, pos);
-    this.#spNumber.index = 3; //Nedtelling starter på 3
-
-    pos.x = 185;
-    pos.y = 130;
-    this.#spGameOver = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.gameOver, pos);
-
-    pos.x = 211;
-    pos.y = 173;
-    this.#spMedal = new libSprite.TSprite(aSpriteCanvas, SpriteInfoList.medal, pos);
-    this.#spcvs.addEventListener("mousemove", this.#onMouseMove);
-    this.#spcvs.addEventListener("click", this.#onClick);
-    this.#activeSprite = null; //Vi har ingen aktive sprite enda, når musen er over en sprite setter vi denne til den aktive sprite
-
-    this.#posScore = new lib2d.TPosition(383, 181);
-    this.#posBestScore = new lib2d.TPosition(383, 225);
-    this.#posPlayScore = new lib2d.TPosition(75, 50);
-  }
-
-  draw() {
-    switch (GameProps.status) {
-      case EGameStatus.idle:
-        this.#spFlappyBird.draw();
-        this.#spButtonPlay.draw();
-        break;
-      case EGameStatus.getReady:
-        this.#spInfoText.index = 0; //Endre teksten til "Get Ready"
-        this.#spInfoText.draw();
-        this.#spNumber.draw();
-        break;
-      case EGameStatus.gameOver:
-        this.#spInfoText.index = 1; //Endre teksten til "Game Over"
-        this.#spInfoText.draw();
-        this.#spGameOver.draw();
-        this.#spMedal.draw();
-        this.#spcvs.drawText(GameProps.score.toString(), this.#posScore);
-        this.#spcvs.drawText(GameProps.bestScore.toString(), this.#posBestScore);
-        this.#spButtonPlay.draw();
-        break;
-      case EGameStatus.playing:
-        this.#spcvs.drawText(GameProps.score.toString(), this.#posPlayScore);
-        break;
-    }
-  } // end of draw
-
-  incScore(aScore){
-    GameProps.score += aScore;
-    if(GameProps.score > this.#ranking.first){ //Første plass
-      this.#ranking.third = this.#ranking.second;
-      this.#ranking.second = this.#ranking.first;
-      this.#ranking.first = GameProps.score;
-      GameProps.bestScore = this.#ranking.first;
-      this.#spMedal.index = 2;
-    }else if(GameProps.score > this.#ranking.second){ //Andre plass
-      this.#ranking.third = this.#ranking.second;
-      this.#ranking.second = GameProps.score;
-      this.#spMedal.index = 1;
-    }else if(GameProps.score > this.#ranking.third){ //Tredje plass
-      this.#ranking.third = GameProps.score;
-      this.#spMedal.index = 3;
-    }else{ //Ingen plassering
-      this.#spMedal.index = 0;
+  draw(){
+    this.#buttonNewGame.draw();
+    this.#buttonCheckAnswer.draw();
+    this.#buttonCheat.draw();
+    this.#panelCheat.draw();
+    for(let i = 0; i < this.#colorHints.length; i++){
+      const colorHint = this.#colorHints[i];
+      colorHint.draw();
     }
   }
 
-  reset(){
-    GameProps.score = 0;
-    this.#spNumber.index = 3;
-    this.#spInfoText.index = 0;
+  onButtonCheatClick = () =>{
+    this.#panelCheat.visible = !this.#panelCheat.visible;
   }
 
-  //Ikke eksamensrelevant kode, men viktig for eventer i canvas
-  #onMouseMove = (aEvent) => {
-    const pos = this.#spcvs.getMousePos(aEvent);
-    const boundRect = this.#spButtonPlay.boundingBox;
-    switch (GameProps.status) {
-      case EGameStatus.idle:
-        if (boundRect.isPositionInside(pos)) {
-          this.#spcvs.style.cursor = "pointer";
-          this.#activeSprite = this.#spButtonPlay;
-        } else {
-          this.#spcvs.style.cursor = "default";
-          this.#activeSprite = null; //Ingen sprite er aktiv
+  onCheckAnswerClick = () =>{
+    //Denne sjekker om vi har valgt rett farge
+    const answerObject = { color : 0, pos: -1, checkThis: true};
+    //Lage liste over computerens svar
+    const computerAnswerList = [];
+    for(let i = 0 ; i < 4; i++){
+      const obj = Object.create(answerObject);
+      const computerAnswer = GameProps.computerAnswers[i];
+      obj.color = computerAnswer.index;
+      obj.pos = i;
+      computerAnswerList.push(obj);
+    }
+    //Lage liste over spillerens svar
+    const playerAnswerList = [];
+    for(let i = 0; i < 4; i++){
+      // kontrollere at brukeren har valgt 4 farger
+      if(GameProps.playerAnswers[i] === null){
+        return; // Avslutt funksjonen, brukeren mangler farger
+      }
+      const obj = Object.create(answerObject);
+      const playerAnswer = GameProps.playerAnswers[i];
+      obj.color = playerAnswer.index;
+      obj.pos = i;
+      playerAnswerList.push(obj);
+    }
+
+    //Sjekke om vi har valgt riktig farge på riktig plass
+    let answerColorHintIndex = 0;
+    let numberOfCorrectColors = 0;
+    for(let i = 0; i < 4; i++){
+      const computerAnswer = computerAnswerList[i];
+      const playerAnswer = playerAnswerList[i];
+      if(computerAnswer.color === playerAnswer.color){
+        console.log(`Riktig farge på plass ${i + 1}`);
+        answerColorHintIndex = this.#createColorHint(answerColorHintIndex, 1);
+        //Vi må ikke sjekke disse to fargene igjen
+        computerAnswer.checkThis = playerAnswer.checkThis = false;
+        //Er alle fargene riktig så er spillet over, og vi må vise fargene fra computeren.
+        //Hint: vi må bruke en variabel som forteller om alle farger er riktig
+        numberOfCorrectColors++;
+      }
+    }
+    if(numberOfCorrectColors === 4){
+      console.log("Gratulerer, du har vunnet!");
+      this.#panelCheat.visible = false;
+      return; //Trenger ikke å sjekke resten av fargene
+    }
+    //Sjekke om vi har valgt riktig farge på feil plass.
+    // ytre for løkke sjekker spillerens svar
+    for(let i = 0; i < 4; i++){
+      const playerAnswer = playerAnswerList[i];
+      // Hvis denne fargen skal sjekkes, sjekk mot alle computerens svar
+      if(playerAnswer.checkThis){
+        for(let j = 0; j < 4; j++){
+          const computerAnswer = computerAnswerList[j];
+          // Test om denne fargen skal sjekkes og at den ikke er på samme plass
+          if(computerAnswer.checkThis && (playerAnswer.pos !== computerAnswer.pos)){
+            if(playerAnswer.color === computerAnswer.color){
+              console.log(`Rett farge på feil plass - ${playerAnswer.pos + 1} , ${computerAnswer.pos + 1}`);
+              answerColorHintIndex = this.#createColorHint(answerColorHintIndex, 0);
+              // Vi må ikke sjekke disse to fargene igjen
+              computerAnswer.checkThis = playerAnswer.checkThis = false;
+            }
+          }
+
         }
-        break;
+      } 
     }
-  };
+    // Gå videre til neste runde
+    this.#setNextRound();
+  } // End of onCheckAnswerClick
 
-  #onClick = () => {
-    if (this.#activeSprite === this.#spButtonPlay) {
-      GameProps.status = EGameStatus.getReady;
-      this.#spcvs.style.cursor = "default";
-      setTimeout(this.#onCountDown, 1000);
-    }
-  };
+  onButtonNewGameClick = () =>{
+    this.#roundNumber = 1;
+    this.#colorHints = [];
+    newGame();
+  }
 
-  #onCountDown = () => {
-    if (this.#spNumber.index > 1) {
-      this.#spNumber.index--;
-      setTimeout(this.#onCountDown, 1000);
-    } else {
-      startGame();
+  //Privat metode, den bruker interne variabler og kan ikke påberopes utenfra
+  #createColorHint(posIndex, colorIndex){
+    const pos = GameProps.answerHintRow[posIndex++];
+    const colorHintSPI = SpriteInfoList.ColorHint;
+    const colorHint = new libSprite.TSprite(this.#spcvs, colorHintSPI, pos);
+    colorHint.index = colorIndex;
+    this.#colorHints.push(colorHint);
+    return posIndex; // Vi må returnere den nye indeksen til posisjonen
+  } // End of #createColorHint
+
+  // Lag en metode #setNextRound som setter opp neste runde
+  #setNextRound(){
+    this.#roundNumber++;
+    if(this.#roundNumber > 10){
+      console.log("Du har tapt, prøv igjen!");
+      this.#panelCheat.visible = false;
+      return;
     }
-  };
-} // End of TMenu class
+    const rowText = `Row${this.#roundNumber}`;
+    GameProps.snapTo.positions = MastermindBoard.ColorAnswer[rowText];
+    GameProps.answerHintRow = MastermindBoard.AnswerHint[rowText];
+    moveRoundIndicator();
+    for(let i = 0; i < 4; i++){
+      GameProps.playerAnswers[i].disable = true;
+      GameProps.playerAnswers[i] = null;
+    }
+  }
+
+} // End of class TMenu
