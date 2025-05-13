@@ -10,8 +10,42 @@
       <span id="txtOut" style="white-space: nowrap"></span>
     </div>
     <ol>
-      <li>[Write the question here, and copy this for more questions]</li>
-      <p>[Write your answer here, and copy this for more answers]</p>
+      <li>[What is an array? A short and concise answer is expected here!]</li>
+      <p>[Et array er en liste som lagrer flere verdier på én plass. Hver verdi har sin egen plass med et nummer som starter på 0..]</p>
+      <p>.</p>
+      <li>[What does it mean to "hardcode" when we talk about programming? (In English, it's called "hard
+        coding", "hard-coding", or "hardcoding").]</li>
+      <p>[Å hardkode betyr å skrive inn faste verdier direkte i koden, i stedet for å hente dem fra for eksempel en bruker eller fil. Det gjør koden vanskeligere å endre senere.]</p>
+      <p>.</p>
+      <li>[Explain in plain text what happens in task 3, and how we can traverse (iterate) the array when we
+        (humans) don't "know" how long the array is.]</li>
+      <p>[Vi bruker .length for å finne ut hvor mange elementer som er i arrayet. En for-løkke bruker dette for å gå gjennom alle elementene, uansett hvor mange det er.]</p>
+      <p>.</p>
+      <li>[Why is it beneficial to store instances of a class in arrays, as in task 4?]</li>
+      <p>[Det gjør det lettere å jobbe med mange objekter på én gang. Vi kan lagre dem samlet og hente dem frem ved å bruke tall (indeks).]</p>
+      <p>.</p>
+      <li>[ Try your best to explain the EWeekDays object from task 7. How do we use the "value" attribute, for
+        example? In what way do "WeekDay", "Workdays", and "Weekends" differ from each other? If we
+        wanted to create a new element "WorkoutDays", which would contain "Monday", "Wednesday", and
+        "Thursday", how would it ideally look? (I will choose the best answer to this task and reward it with
+        pizza in the cafeteria right after New Year. Remember to mark in your submission if you want to
+        participate in the competition!)]</li>
+      <p>[EWeekDays inneholder navn på ukedager og et tall (value) som gjør det mulig å kombinere flere dager. WeekDay viser én dag. WeekDay viser én dag. Workdays samler alle arbeidsdager (mandag–fredag).]</p>
+      <p>[value- attribute is a number that often represent bitwise flags, allowing multiple days to be grouped together under a single label.]</p>
+      <p>[Weekends er lørdag og søndag.Et nytt element kunne vært:]</p>
+      <p>[Hvis vi ville lage en ny "WorkOutDays" element, det ville sett ut som noe som dette: WorkoutDays: { value: 0x01 + 0x04 + 0x08, name: "WorkoutDays" }</p>
+      <p>.</p>
+      <li> In task 8, we will use a "callback" routine when sorting. Explain how such a "callback" routine works.]</li>
+      <p>[En callback brukes til å sammenligne to tall (eller elementer) om gangen. Hvis det første tallet er større, byttes plassene. Dette skjer mange ganger til hele lista er sortert.]</p>
+      <p>.</p>
+      <li>[What happens in the sorting routines you have created? Try to explain how the array can figure out
+        if an element should come before or after another. The best way to answer this is to actually print
+        both parameters each time the sorting routine runs.]</li>
+      <p>[Funksjonen sammenligner to og to tall. Hvis det første er større enn det andre, bytter de plass. Dette gjentas til alt er i riktig rekkefølge.]</p>
+      <p>.</p>
+      <li>[In task 10, we will create an array with rows and columns. Explain what the first element of the array
+        contains]</li>
+      <p>[Det første elementet er den første raden. Den ser ut som en liten liste med kolonneverdier, f.eks.: (["Row 1, Col 1", "Row 1, Col 2", ..., "Row 1, Col 9"])]</p>
     </ol>
     <script type="module" src="./task_4-2.mjs" defer></script>
   </body>
