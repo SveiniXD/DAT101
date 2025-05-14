@@ -5,7 +5,7 @@ import { GameProps, EGameStatus } from "./FlappyBird.mjs";
 
 class THero extends libSprite.TSprite {
   #spi;
-  #gravity = 9.95 / 100;
+  #gravity = 9.81 / 100;
   #velocity = 0;
   #sineWave;
   constructor(aSpriteCanvas, aSpriteInfo, aPosition) {
@@ -36,6 +36,7 @@ class THero extends libSprite.TSprite {
       this.posY = groundY - this.#spi.height;
       GameProps.status = EGameStatus.gameOver;
       this.animateSpeed = 0;
+      GameProps.sounds.running.stop();
     }
   }
 

@@ -37,7 +37,7 @@ export const GameProps = {
   soundMuted: false,
   dayTime: true,
   speed: 1,
-  status: EGameStatus.idle, //For testing, normally EGameStatus.idle
+  status: EGameStatus.idle, 
   background: null,
   ground: null,
   hero: null,
@@ -210,9 +210,11 @@ function setSoundOnOff() {
 function setDayNight() {
   if (rbDayNight[0].checked) {
     GameProps.dayTime = true;
+    SpriteInfoList.background.x = 246;
     console.log("Day time");
   } else {
     GameProps.dayTime = false;
+    SpriteInfoList.background.x = 820;
     console.log("Night time");
   }
 } // end of setDayNight
